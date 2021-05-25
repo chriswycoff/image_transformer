@@ -1,1 +1,4 @@
 /env
+/images
+*.mp4
+__pycache__
