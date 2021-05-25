@@ -16,16 +16,16 @@ from moviepy.editor import *
 
 def moviefy(unique_id,image_name,frames):
     base_dir = os.path.realpath('./images/images_effected/'+ str(unique_id)+"/" )
-    print(base_dir)
+    # print(base_dir)
 
     fps = 24
 
     file_list = glob.glob('./images/images_effected/'+ str(unique_id)+'/'+ '*.png')  # Get all the pngs in the current directory
     
     file_list_sorted = sorted(file_list,reverse=False)  # Sort the images
-    print()
-    print(file_list_sorted)
-    print()
+    # print()
+    # print(file_list_sorted)
+    # print()
     clips = [ImageClip(m).set_duration(1/24)
             for m in file_list_sorted]
     # print(clips)

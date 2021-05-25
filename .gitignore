@@ -2,3 +2,4 @@
 /images
 *.mp4
 __pycache__
+test_movies/

@@ -157,6 +157,45 @@ def pyvista_test2():
     #     plotter.show(screenshot='./images/images_effected/lion' + str(i) + '.png')
     #     # plotter.remove_actor(actor)
 
+def pyvista_test3():
+    plotter = pv.Plotter(off_screen=False)
+    mesh = pv.read("./images/images_3d/snake.stl")
+    plotter.background_color = 'brown'
+    # mesh.rotate_x(0)
+    texlion = pv.read_texture("./images/images_2d/snake.jpeg")
+    texlion.flip(1)
+    texlion.flip(0)
+    mesh.texture_map_to_plane(inplace=True)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    # plotter.add_mesh(mesh, texture=texlion)
+    plotter.add_mesh(mesh, texture=texlion)
+    
+    cam = plotter.camera
+
+    cam.azimuth = 100
+    # 
+    plotter.show()
+
+def pyvista_test4():
+    plotter = pv.Plotter(off_screen=False)
+    mesh = pv.read("./images/images_3d/nora.stl")
+    plotter.background_color = 'brown'
+    # mesh.rotate_x(0)
+    texlion = pv.read_texture("./images/images_2d/nora.jpeg")
+    texlion.flip(1)
+    texlion.flip(0)
+    mesh.texture_map_to_plane(inplace=True)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    # plotter.add_mesh(mesh, texture=texlion)
+    plotter.add_mesh(mesh, texture=texlion)
+    
+    cam = plotter.camera
+
+    cam.azimuth = 100
+    # 
+    plotter.show()
 
 def add_image():
     plotter = pv.Plotter(lighting='none')
@@ -174,11 +213,12 @@ def add_image():
 def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
     background_image=None, background_color=None,lighting=None,unique_id = 1, \
     frames=10):
-    plotter = pv.Plotter(lighting='none',off_screen=True)
+    plotter = pv.Plotter(off_screen=True)
     mesh = pv.read(three_d_image)
     plotter.background_color = 'brown'
     # mesh.rotate_z(180)
     the_tex = pv.read_texture(two_d_image)
+    the_tex.flip(0)
     the_tex.flip(1)
     mesh.texture_map_to_plane(inplace=True)
     # mesh.rotate_y(30)
@@ -192,7 +232,7 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
     counter = 0
     increment = 360/frames
     for i in range(frames):
-        plotter = pv.Plotter(lighting='none',off_screen=True)
+        plotter = pv.Plotter(off_screen=True)
         plotter.background_color = "white"
         # mesh.rotate_x(360/frames)
         plotter.add_mesh(mesh, texture=the_tex)
@@ -220,3 +260,5 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
 
 # main()
 # pyvista_test2()
+# pyvista_test3()
+# pyvista_test4()
