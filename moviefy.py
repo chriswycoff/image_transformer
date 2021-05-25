@@ -14,7 +14,7 @@ import os
 import glob
 from moviepy.editor import *
 
-def moviefy(unique_id,image_name):
+def moviefy(unique_id,image_name,frames):
     base_dir = os.path.realpath('./images/images_effected/'+ str(unique_id)+"/" )
     print(base_dir)
 
@@ -26,7 +26,7 @@ def moviefy(unique_id,image_name):
     print()
     print(file_list_sorted)
     print()
-    clips = [ImageClip(m).set_duration(1)
+    clips = [ImageClip(m).set_duration(1/24)
             for m in file_list_sorted]
     # print(clips)
 

@@ -16,10 +16,10 @@ def transform_image(image_path,double=False,frames=10, cleanup=True):
     new_file = "./images/images_3d/"+ str(unique_id) +".stl"
     makestl.make_stl(img_file, new_file)
     add_effects.create_movie(img_file,new_file,unique_id=unique_id,frames=frames)
-    moviefy.moviefy(unique_id,"image")
+    moviefy.moviefy(unique_id,"image",frames)
     if cleanup:
         os.remove(new_file)
         shutil.rmtree('./images/images_effected/'+ str(unique_id))
 
 image_path = "./images/images_2d/cool_lion.jpeg"
-transform_image(image_path,frames=10)
+transform_image(image_path,frames=80,cleanup=True)

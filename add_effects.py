@@ -177,8 +177,9 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
     plotter = pv.Plotter(lighting='none',off_screen=True)
     mesh = pv.read(three_d_image)
     plotter.background_color = 'brown'
-    mesh.rotate_z(180)
+    # mesh.rotate_z(180)
     the_tex = pv.read_texture(two_d_image)
+    the_tex.flip(1)
     mesh.texture_map_to_plane(inplace=True)
     # mesh.rotate_y(30)
     # tex = examples.download_masonry_texture()
@@ -188,14 +189,19 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
     # plotter.show()
     # unique_id = uuid.uuid4()
     os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
     for i in range(frames):
         plotter = pv.Plotter(lighting='none',off_screen=True)
         plotter.background_color = "white"
-        mesh.rotate_x(360/frames)
+        # mesh.rotate_x(360/frames)
         plotter.add_mesh(mesh, texture=the_tex)
+        cam = plotter.camera
+        counter += increment
+        cam.azimuth = counter
         if len(str(i)) == 1:
             image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(i) + '.png'
-        elif len(str(i)) == 1:
+        elif len(str(i)) == 2:
             image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(i) + '.png'
         else:
             image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
@@ -213,4 +219,4 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
 #     pass
 
 # main()
-pyvista_test2()
+# pyvista_test2()
