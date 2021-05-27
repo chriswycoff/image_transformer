@@ -7,8 +7,7 @@ import uuid
 import os
 import shutil
 import time
-
-
+from  PIL import Image
 
 
 def transform_image(image_path,double=False,frames=10, cleanup=True, make_mov=True):
@@ -16,8 +15,12 @@ def transform_image(image_path,double=False,frames=10, cleanup=True, make_mov=Tr
     unique_id = uuid.uuid4()
     img_file = image_path
     just_name = os.path.basename(img_file).split(".")[0]
-    
-    new_file = "./images/images_3d/"+ str(unique_id) +".stl"
+    image = Image.open("./test/imageToSave.jpeg")
+    new_image = image.resize((800, 800))
+    image.close()
+    new_image.save("./test/imageToSave.jpeg")
+    new_image.close()
+    new_file = "./images/images_3d/"+ str(unique_id) + ".stl"
     makestl.make_stl(img_file, new_file)
     time.sleep(0.1) #helps make sure program does not bug out 
     add_effects.create_movie(img_file,new_file,unique_id=unique_id,frames=frames)
@@ -30,11 +33,17 @@ def transform_image(image_path,double=False,frames=10, cleanup=True, make_mov=Tr
 
 
 # TESTS
-image_path = "./images/images_2d/cool_lion.jpeg"
-transform_image(image_path,frames=1,cleanup=True)
+if __name__ == "__main__":
+    # try:
+    #     image_path = "./images/images_2d/cool_lion.jpeg"
+    #     transform_image(image_path,frames=1,cleanup=True)
 
-image_path = "./images/images_2d/snake.jpeg"
-transform_image(image_path,frames=1,cleanup=True,make_mov=True)
+    #     image_path = "./images/images_2d/snake.jpeg"
+    #     transform_image(image_path,frames=1,cleanup=True,make_mov=True)
 
-image_path = "./images/images_2d/nora.jpeg"
-transform_image(image_path,frames=1,cleanup=True,make_mov=True)
+    #     image_path = "./images/images_2d/nora.jpeg"
+    #     transform_image(image_path,frames=1,cleanup=True,make_mov=True)
+    # except:
+    #     print("something went wrong likely test files are missing")
+         image_path = "./test/imageToSave.jpeg" 
+         transform_image(image_path,frames=100,cleanup=False,make_mov=True)

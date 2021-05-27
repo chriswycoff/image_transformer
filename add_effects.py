@@ -11,6 +11,7 @@ import pyvista as pv
 import os
 
 from pyvista.plotting import camera
+from pyvista.utilities.helpers import row_array
 
 ### code below using vtkplotlib DOES work. however using was my first attempt however 
 ### as I continued to add features it became clunkier and I found pyvista 
@@ -179,10 +180,10 @@ def pyvista_test3():
 
 def pyvista_test4():
     plotter = pv.Plotter(off_screen=False)
-    mesh = pv.read("./images/images_3d/nora.stl")
+    mesh = pv.read("./images/images_3d/lion.stl")
     plotter.background_color = 'brown'
     # mesh.rotate_x(0)
-    texlion = pv.read_texture("./images/images_2d/nora.jpeg")
+    texlion = pv.read_texture("./images/images_2d/cool_lion.jpeg")
     texlion.flip(1)
     texlion.flip(0)
     mesh.texture_map_to_plane(inplace=True)
@@ -193,7 +194,9 @@ def pyvista_test4():
     
     cam = plotter.camera
 
-    cam.azimuth = 100
+    cam.roll = 240 
+    cam.azimuth = 45
+    cam.elevation = 40
     # 
     plotter.show()
 
@@ -210,7 +213,7 @@ def add_image():
     
     plotter.show()
 
-def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
+def create_movie_old(two_d_image,three_d_image,double=False,texture_img=None, \
     background_image=None, background_color=None,lighting=None,unique_id = 1, \
     frames=10):
     plotter = pv.Plotter(off_screen=True)
@@ -247,6 +250,84 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
             image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
         plotter.show(screenshot=image_name)
         # plotter.remove_actor(actor)
+
+def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
+    background_image=None, background_color=None,lighting=None,unique_id = 1, \
+    frames=10):
+    plotter = pv.Plotter(off_screen=True)
+    mesh = pv.read(three_d_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_z(180)
+    the_tex = pv.read_texture(two_d_image)
+    the_tex.flip(0)
+    the_tex.flip(1)
+    mesh.texture_map_to_plane(inplace=True)
+    # mesh.rotate_y(30)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    actor = plotter.add_mesh(mesh, texture=the_tex)
+    
+    # plotter.show()
+    # unique_id = uuid.uuid4()
+    os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
+    # to make face forward
+    # cam.roll = 240 
+    # cam.azimuth = 45
+    # cam.elevation = 40
+    azimuth_array = [240]
+    roll_array = [45]
+    elevation_array = [40]
+    for i in range(frames//2):
+        azimuth_array.append(azimuth_array[i]+1)
+
+    for i in range(frames//2,frames):
+        azimuth_array.append(azimuth_array[i])
+
+    for i in range(frames//2):
+        elevation_array.append(40)
+
+    for i in range(frames//2,frames):
+        elevation_array.append(elevation_array[i]+1)
+    az_counter = 1
+    elevation_counter = 1
+    for i in range(frames):
+        plotter = pv.Plotter(off_screen=True)
+        plotter.background_color = "white"
+        # mesh.rotate_x(360/frames)
+        plotter.add_mesh(mesh, texture=the_tex)
+        cam = plotter.camera
+        counter += increment
+        # cam.azimuth = azimuth_array[i]
+        # cam.roll = 240 
+        # cam.elevation = elevation_array[i]
+        
+        cam.roll = 240 
+        cam.azimuth = 45
+        cam.elevation = 40
+
+        if i < frames* (1/4):
+            cam.azimuth += az_counter
+            az_counter += 1
+        elif i < frames * (1/2):
+            cam.azimuth += az_counter
+            az_counter -= 1
+        elif i < frames * (3/4):
+            print("herer")
+            cam.elevation += elevation_counter
+            elevation_counter += 1
+        else:
+            cam.elevation += elevation_counter
+            elevation_counter -= 1
+
+        if len(str(i)) == 1:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(i) + '.png'
+        elif len(str(i)) == 2:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(i) + '.png'
+        else:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
+        plotter.show(screenshot=image_name)
 
 
 # def main():

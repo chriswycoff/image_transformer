@@ -1,0 +1,30 @@
+body {
+    margin: 40px;
+  }
+html{
+  background-color: #A7C4B5 ;
+}
+
+.wrapper1{
+    display: grid;
+    grid-template-columns: 100px 100px;
+    grid-template-rows: 25px 25px 25px;
+    grid-gap: 10px;
+    grid-row-gap: 50px;
+    color: rgb(0, 0, 0);
+    justify-content: center;
+
+  }
+.center_item_border{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    border: 3px solid green;
+    border-radius: 20px;
+}
+.center_item{
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+
+}

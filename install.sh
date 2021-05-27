@@ -7,3 +7,9 @@ mkdir images
 mkdir images/images_2d
 mkdir images/images_3d
 mkdir images/images_effected
+python main.py
+# works for sure untill here
+cd frontend
+python3 -m http.server
+open http://localhost:8000/
+

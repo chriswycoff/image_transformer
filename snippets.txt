@@ -1,2 +1,5 @@
 ffmpeg -framerate 10 -i testimages/hopeitworks%03d.png -s:v 1280x720 -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p frames.mp4
 
+chmod +x filename.sh
+
+open http://localhost:8000/
