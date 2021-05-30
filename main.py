@@ -37,16 +37,16 @@ def respond():
         
         imgdata = imgdata[15:]
         #todo gotta change this
-        filename = "./test/imageToSave.jpeg"  
+        filename = "./images/imageToSave.jpeg"  
         with open(filename, 'wb') as f:
             f.write(imgdata)            
-        # with open("./test/imageToSave.jpeg", "wb") as fh:
+        # with open("./images/imageToSave.jpeg", "wb") as fh:
         #     fh.write(base64.decodebytes(img_data.encode()))
         # img_data_bytes = base64.decodebytes(img_data.encode())
         # im_bytes = base64.b64decode(img_data_bytes)   # im_bytes is a binary image
         # im_file = BytesIO(im_bytes)  # convert image to file-like object
         # img = Image.open(im_file) 
-        # img.save("./test/imageToSave.jpeg")
+        # img.save("./images/imageToSave.jpeg")
         time.sleep(0.2)
         
         p1 = subprocess.Popen(['python', "transform_image.py"])
