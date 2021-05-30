@@ -181,8 +181,14 @@ def pyvista_test3():
 def pyvista_test4():
     plotter = pv.Plotter(off_screen=False)
     mesh = pv.read("./images/images_3d/lion.stl")
+    mesh2 = pv.read("./images/images_3d/lion.stl")
     plotter.background_color = 'brown'
     # mesh.rotate_x(0)
+    # print(mesh2._get_attrs())
+    # above prints attributes to know how much to translate
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
     texlion = pv.read_texture("./images/images_2d/cool_lion.jpeg")
     texlion.flip(1)
     texlion.flip(0)
@@ -191,6 +197,36 @@ def pyvista_test4():
     # mesh.plot(texture=texacs)
     # plotter.add_mesh(mesh, texture=texlion)
     plotter.add_mesh(mesh, texture=texlion)
+    plotter.add_mesh(mesh2, texture=texlion)
+    
+    cam = plotter.camera
+
+    cam.roll = 240 
+    cam.azimuth = 45
+    cam.elevation = 40
+    # 
+    plotter.show()
+
+def pyvista_test5(imagefile,newfile):
+    plotter = pv.Plotter(off_screen=False)
+    mesh = pv.read("./images/images_3d/lion.stl")
+    mesh2 = pv.read("./images/images_3d/lion.stl")
+    plotter.background_color = 'brown'
+    # mesh.rotate_x(0)
+    # print(mesh2._get_attrs())
+    # above prints attributes to know how much to translate
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
+    texlion = pv.read_texture("./images/images_2d/cool_lion.jpeg")
+    texlion.flip(1)
+    texlion.flip(0)
+    mesh.texture_map_to_plane(inplace=True)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    # plotter.add_mesh(mesh, texture=texlion)
+    plotter.add_mesh(mesh, texture=texlion)
+    plotter.add_mesh(mesh2, texture=texlion)
     
     cam = plotter.camera
 
@@ -314,7 +350,7 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
             cam.azimuth += az_counter
             az_counter -= 1
         elif i < frames * (3/4):
-            print("herer")
+            # print("herer")
             cam.elevation += elevation_counter
             elevation_counter += 1
         else:
@@ -329,6 +365,148 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
             image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
         plotter.show(screenshot=image_name)
 
+# nice spinning effect
+def create_movie2(two_d_image,three_d_image,double=False,texture_img=None, \
+    background_image=None, background_color=None,lighting=None,unique_id = 1, \
+    frames=10):
+    plotter = pv.Plotter(off_screen=True)
+    mesh = pv.read(three_d_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_z(180)
+    the_tex = pv.read_texture(two_d_image)
+    the_tex.flip(0)
+    the_tex.flip(1)
+    mesh.texture_map_to_plane(inplace=True)
+    # mesh.rotate_y(30)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    actor = plotter.add_mesh(mesh, texture=the_tex)
+    
+    # plotter.show()
+    # unique_id = uuid.uuid4()
+    os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
+
+    az_counter = 45
+    elevation_counter = 40
+    roll_counter = 240
+    counter = 1
+    for i in range(frames):
+        plotter = pv.Plotter(off_screen=True)
+        plotter.background_color = "white"
+        # mesh.rotate_x(360/frames)
+        plotter.add_mesh(mesh, texture=the_tex)
+        cam = plotter.camera
+        # az_counter += 1
+        roll_counter += 1
+        
+        cam.roll = roll_counter 
+        cam.azimuth = az_counter
+        cam.elevation = elevation_counter
+        
+
+
+
+        if len(str(i)) == 1:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(i) + '.png'
+        elif len(str(i)) == 2:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(i) + '.png'
+        else:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
+        plotter.show(screenshot=image_name)
+
+# nice spinning effect
+# double sided
+def create_movie3(two_d_image,three_d_image,double=False,texture_img=None, \
+    background_image=None, background_color=None,lighting=None,unique_id = 1, \
+    frames=10):
+    plotter = pv.Plotter(off_screen=True)
+    mesh = pv.read(three_d_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_z(180)
+    the_tex = pv.read_texture(two_d_image)
+    the_tex2 = pv.read_texture(two_d_image)
+    the_tex.flip(0)
+    the_tex.flip(1)
+    mesh.texture_map_to_plane(inplace=True)
+
+    mesh2 = pv.read(three_d_image)
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
+    # mesh.rotate_y(30)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    plotter.add_mesh(mesh, texture=the_tex)
+    the_tex2.flip(1)
+    plotter.add_mesh(mesh2, texture=the_tex2)
+    # plotter.show()
+    # unique_id = uuid.uuid4()
+    os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
+
+    az_counter = 45
+    elevation_counter = 40
+    roll_counter = 240
+    counter = 1
+    for i in range(frames):
+        plotter = pv.Plotter(off_screen=True)
+        plotter.background_color = "white"
+        # mesh.rotate_x(360/frames)
+        plotter.add_mesh(mesh, texture=the_tex)
+        plotter.add_mesh(mesh2, texture=the_tex2)
+        cam = plotter.camera
+        # az_counter += 1
+        roll_counter += 1
+        
+        cam.roll = roll_counter 
+        cam.azimuth = az_counter
+        cam.elevation = elevation_counter
+        
+
+
+
+        if len(str(i)) == 1:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(i) + '.png'
+        elif len(str(i)) == 2:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(i) + '.png'
+        else:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
+        plotter.show(screenshot=image_name)
+
+
+def pyvista_command(stl_image,two_d_image):
+    plotter = pv.Plotter(off_screen=False)
+    mesh = pv.read(stl_image)
+    mesh2 = pv.read(stl_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_x(0)
+    # print(mesh2._get_attrs())
+    # above prints attributes to know how much to translate
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
+    texlion = pv.read_texture(two_d_image)
+    texlion2 = pv.read_texture(two_d_image)
+    texlion.flip(1)
+    texlion.flip(0)
+    mesh.texture_map_to_plane(inplace=True)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    # plotter.add_mesh(mesh, texture=texlion)
+    plotter.add_mesh(mesh, texture=texlion)
+    texlion2.flip(1)
+    plotter.add_mesh(mesh2,texture=texlion2)
+    
+    cam = plotter.camera
+
+    cam.roll = 240 
+    cam.azimuth = 45
+    cam.elevation = 40
+    # 
+    plotter.show()
 
 # def main():
 #     # make_images(demo=True)
@@ -342,4 +520,5 @@ def create_movie(two_d_image,three_d_image,double=False,texture_img=None, \
 # main()
 # pyvista_test2()
 # pyvista_test3()
-# pyvista_test4()
+if __name__ == "__main__":
+    pyvista_test4()

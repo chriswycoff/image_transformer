@@ -15,15 +15,18 @@ def transform_image(image_path,double=False,frames=10, cleanup=True, make_mov=Tr
     unique_id = uuid.uuid4()
     img_file = image_path
     just_name = os.path.basename(img_file).split(".")[0]
-    image = Image.open("./test/imageToSave.jpeg")
+    image = Image.open("./images/imageToSave.jpeg")
     new_image = image.resize((800, 800))
     image.close()
-    new_image.save("./test/imageToSave.jpeg")
+    new_image.save("./images/imageToSave.jpeg")
     new_image.close()
     new_file = "./images/images_3d/"+ str(unique_id) + ".stl"
     makestl.make_stl(img_file, new_file)
     time.sleep(0.1) #helps make sure program does not bug out 
-    add_effects.create_movie(img_file,new_file,unique_id=unique_id,frames=frames)
+    if double:
+        add_effects.create_movie3(img_file,new_file,unique_id=unique_id,frames=frames)
+    else:
+        add_effects.create_movie2(img_file,new_file,unique_id=unique_id,frames=frames)
     time.sleep(0.1)
     if make_mov:
         moviefy.moviefy(unique_id,just_name,frames)
@@ -46,4 +49,4 @@ if __name__ == "__main__":
     # except:
     #     print("something went wrong likely test files are missing")
          image_path = "./test/imageToSave.jpeg" 
-         transform_image(image_path,frames=100,cleanup=False,make_mov=True)
+         transform_image(image_path,frames=360,cleanup=True,make_mov=True,double=True)

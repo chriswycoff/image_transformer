@@ -36,6 +36,7 @@ def respond():
         # print(type(imgdata))
         
         imgdata = imgdata[15:]
+        #todo gotta change this
         filename = "./test/imageToSave.jpeg"  
         with open(filename, 'wb') as f:
             f.write(imgdata)            
@@ -52,7 +53,11 @@ def respond():
 
         p1.wait()
 
-    return {"status":"good"}
+        file_vid = flask.send_file("./imageToSave.mp4")
+
+    # return {"status":"good", "video":file_vid}
+    # print(file_vid)
+    return file_vid
 
 if __name__ == '__main__':
     app.run()
