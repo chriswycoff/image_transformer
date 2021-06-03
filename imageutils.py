@@ -5,8 +5,11 @@ def img2array(filename):
 	"""Turns an image into a numpy array. Requires PIL (Python Imaging Library) or Pillow (a PIL fork)."""
 	img = Image.open(filename)
 	array = np.array(img, dtype=np.float32)
+	# print(array)
 	if array.ndim == 3:
+		# print("here")
 		array = array.sum(2)
+		# print(array)
 	return array
 
 def compressImage(image, height):

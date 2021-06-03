@@ -1,16 +1,26 @@
 import numpy as np
 
-def get_triangles(npimage, depth=10):
+def get_triangles(npimage, depth=10, invert=False):
 	"""
 	Makes upper left and lower right triangles. Takes in numpy array, returns array of triangles. Automatically
 	excludes invalid triangles (triangles with one vertex off the edge)
 	"""
-	npimage = npimage + depth
+	# npimage = npimage * 10
+	# print(npimage)
+	# print(type(npimage))
+	if invert:
+		npimage = npimage - 50
+		npimage = np.abs(npimage)
+	npimage = npimage + 0
 	h, w = npimage.shape
 	y, x = np.indices((h, w))
+	# print(len(y[0]))
 	cube = np.dstack((x, y, npimage))
+	# print(cube)
 	ults = np.zeros((h-1, w-1, 3, 4))
+	# print(ults)
 	lrts = np.zeros((h-1, w-1, 3, 4))
+	# print(len(ults))
 	ults[:,:,:,1] = cube[:-1,:-1]
 	ults[:,:,:,2] = cube[:-1,1:]
 	ults[:,:,:,3] = cube[1:,:-1]
@@ -18,10 +28,14 @@ def get_triangles(npimage, depth=10):
 	lrts[:,:,:,2] = cube[1:,:-1]
 	lrts[:,:,:,3] = cube[:-1,1:]
 	sides = make_sides(ults, lrts)
+	# print(len(ults))
 	ults = ults.reshape(((ults.shape[0])*(ults.shape[1]), 3, 4))
+	# print(len(ults))
 	lrts = lrts.reshape(((lrts.shape[0])*(lrts.shape[1]), 3, 4))
+	# print(lrts)
 	triset = get_cross(np.concatenate((ults, lrts, sides)))
 	triset = np.swapaxes(triset, 1, 2).copy()
+	# print(triset)
 	triset = np.concatenate((triset, make_bottom(h-1, w-1)))
 	return normalize_triangles(triset)
 
@@ -111,7 +125,7 @@ def get_cross(triset):
 	triset[:,:,0] = np.cross(v1, v2)
 	return triset
 
-def to_mesh(npimage, filename, depth=1, double=False, _ascii=False):
+def to_mesh(npimage, filename, depth=1, double=False, _ascii=False,invert=False):
 	"""
 	Writes an npimage to stl file. Splits each pixel into two triangles.
 		npimage - the image to convert represented as a numpy array.
@@ -125,9 +139,11 @@ def to_mesh(npimage, filename, depth=1, double=False, _ascii=False):
 	"""
 	if not filename[-4:].lower() == '.stl':
 		filename += '.stl'
+	# print(len(npimage))
+	# print(len(npimage[0]))
 	if isinstance(npimage, np.ma.core.MaskedArray):
 		npimage = npimage.data
-	triset = get_triangles(npimage, depth)
+	triset = get_triangles(npimage, depth, invert=invert)
 	if double:
 		triset2 = triset.copy()
 		triset2[:,0] = -triset2[:,0]

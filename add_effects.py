@@ -9,9 +9,9 @@ import numpy as np
 import pyvista as pv
 # import uuid
 import os
-
-from pyvista.plotting import camera
-from pyvista.utilities.helpers import row_array
+import librosa 
+# from pyvista.plotting import camera
+# from pyvista.utilities.helpers import row_array
 
 ### code below using vtkplotlib DOES work. however using was my first attempt however 
 ### as I continued to add features it became clunkier and I found pyvista 
@@ -476,8 +476,280 @@ def create_movie3(two_d_image,three_d_image,double=False,texture_img=None, \
             image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
         plotter.show(screenshot=image_name)
 
+# nice spinning effect
+# double sided
+def create_movie4(two_d_image,three_d_image,double=False,texture_img=None, \
+    background_image=None, background_color=None,lighting=None,unique_id = 1, \
+    frames=10):
+    plotter = pv.Plotter(off_screen=True)
+    mesh = pv.read(three_d_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_z(180)
+    the_tex = pv.read_texture(two_d_image)
+    the_tex2 = pv.read_texture(two_d_image)
+    the_tex.flip(0)
+    the_tex.flip(1)
+    mesh.texture_map_to_plane(inplace=True)
 
-def pyvista_command(stl_image,two_d_image):
+    mesh2 = pv.read(three_d_image)
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
+    # mesh.rotate_y(30)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    plotter.add_mesh(mesh, texture=the_tex)
+    the_tex2.flip(1)
+    plotter.add_mesh(mesh2, texture=the_tex2)
+    # plotter.show()
+    # unique_id = uuid.uuid4()
+    os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
+
+    az_counter = 45
+    elevation_counter = 40
+    roll_counter = 240
+    counter = 1
+    for i in range(1,frames+1):
+        # factor = math.sin(i)
+        # factor = math.sqrt(abs(factor))
+        # factor = math.exp(-(1/(i**2)))*(math.sin(1/i))
+        factor = abs(math.cos(i*.05))
+
+        # for scaling from top left to bottom right x,y,z
+        # print(factor)
+        transform_matrix = np.array\
+                                ([[1, 0, 0, 0],
+                                 [0, 1, 0, 0],
+                                 [0, 0, .5+.5*factor, 0],
+                                 [0, 0, 0, 1]])
+        mesh2_new  = mesh2.copy()
+        mesh_new  = mesh.copy()
+        mesh2_new.transform(transform_matrix)
+        mesh_new.transform(transform_matrix)
+        plotter = pv.Plotter(off_screen=True)
+        plotter.background_color = "white"
+        # mesh.rotate_x(360/frames)
+        plotter.add_mesh(mesh_new, texture=the_tex)
+        plotter.add_mesh(mesh2_new, texture=the_tex2)
+        plotter.add_background_image(background_image)
+        cam = plotter.camera
+        # az_counter += 1
+        roll_counter += 1
+        
+        cam.roll = roll_counter 
+        cam.azimuth = az_counter
+        cam.elevation = elevation_counter
+    
+
+        if len(str(i)) == 1:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(i) + '.png'
+        elif len(str(i)) == 2:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(i) + '.png'
+        else:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
+        plotter.show(screenshot=image_name)
+
+# multiple rotations
+# double sided
+def create_movie5(two_d_image,three_d_image,double=False,texture_img=None, \
+    background_image=None, background_color=None,lighting=None,unique_id = 1, \
+    frames=10):
+    plotter = pv.Plotter(off_screen=True)
+    mesh = pv.read(three_d_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_z(180)
+    the_tex = pv.read_texture(two_d_image)
+    the_tex2 = pv.read_texture(two_d_image)
+    the_tex.flip(0)
+    the_tex.flip(1)
+    mesh.texture_map_to_plane(inplace=True)
+
+    mesh2 = pv.read(three_d_image)
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
+    # mesh.rotate_y(30)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    plotter.add_mesh(mesh, texture=the_tex)
+    the_tex2.flip(1)
+    plotter.add_mesh(mesh2, texture=the_tex2)
+    # plotter.show()
+    # unique_id = uuid.uuid4()
+    os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
+
+    az_counter = 45
+    elevation_counter = 40
+    roll_counter = 240
+    counter = 1
+    for i in range(1,frames+1):
+        # factor = math.sin(i)
+        # factor = math.sqrt(abs(factor))
+        # factor = math.exp(-(1/(i**2)))*(math.sin(1/i))
+        factor = abs(math.cos(i*.05))
+
+        # for scaling from top left to bottom right x,y,z
+        # print(factor)
+        transform_matrix = np.array\
+                                ([[1, 0, 0, 0],
+                                 [0, 1, 0, 0],
+                                 [0, 0, .5+.5*factor, 0],
+                                 [0, 0, 0, 1]])
+        mesh2_new  = mesh2.copy()
+        mesh_new  = mesh.copy()
+        mesh2_new.transform(transform_matrix)
+        mesh_new.transform(transform_matrix)
+        plotter = pv.Plotter(off_screen=True)
+        plotter.background_color = "white"
+        # mesh.rotate_x(360/frames)
+        plotter.add_mesh(mesh_new, texture=the_tex)
+        plotter.add_mesh(mesh2_new, texture=the_tex2)
+        plotter.add_background_image(background_image)
+        cam = plotter.camera
+        az_counter += 1
+        roll_counter += 1
+        elevation_counter += 1
+
+        cam.roll = roll_counter 
+        cam.azimuth = az_counter
+        cam.elevation = elevation_counter
+    
+
+        if len(str(i)) == 1:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(i) + '.png'
+        elif len(str(i)) == 2:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(i) + '.png'
+        else:
+            image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(i) + '.png'
+        plotter.show(screenshot=image_name)
+
+# adio attemp
+# double sided
+def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
+    background_image=None, background_color=None,lighting=None,unique_id = 1, \
+    frames=10):
+    ############ audio #########################
+    fn_mp3 = os.path.join('images','sounds','clip1.mp3')
+    x, fs = librosa.load(fn_mp3, sr=None)
+    print(len(x))
+    print()
+    print(x)
+    print(fs)
+    print(type(x))
+    # print(x.shape)
+    abs_x = np.abs(x)
+    print("max ",np.max(abs_x))
+    print("average ",np.median(abs_x))
+    print("median ",np.mean(abs_x))
+    the_median = np.median(abs_x)
+    the_max = np.max(abs_x)
+    the_max_minus = the_max - the_max*0.15
+    the_mean = np.mean(abs_x)
+
+    ######################################
+    plotter = pv.Plotter(off_screen=True)
+    mesh = pv.read(three_d_image)
+    plotter.background_color = 'brown'
+    # mesh.rotate_z(180)
+    the_tex = pv.read_texture(two_d_image)
+    the_tex2 = pv.read_texture(two_d_image)
+    the_tex.flip(0)
+    the_tex.flip(1)
+    mesh.texture_map_to_plane(inplace=True)
+
+    mesh2 = pv.read(three_d_image)
+    mesh2.rotate_y(180)
+    mesh2.translate((140,0,0))
+    mesh2.texture_map_to_plane(inplace=True)
+    # mesh.rotate_y(30)
+    # tex = examples.download_masonry_texture()
+    # mesh.plot(texture=texacs)
+    plotter.add_mesh(mesh, texture=the_tex)
+    the_tex2.flip(1)
+    plotter.add_mesh(mesh2, texture=the_tex2)
+    # plotter.show()
+    # unique_id = uuid.uuid4()
+    os.mkdir('./images/images_effected/'+ str(unique_id))
+    counter = 0
+    increment = 360/frames
+
+    az_counter = 45
+    elevation_counter = 40
+    roll_counter = 240
+    counter = 1
+    seconds_chunks = len(x)//fs
+    print(seconds_chunks)
+    # seconds_chunks ** 100
+    by_8 = seconds_chunks*8
+    by_8_fs = fs//8
+    frame_counter = 0
+    print("the_max_minus",the_max_minus)
+    for s in range(by_8):
+        if s > 10*8:
+            break
+        factor = 0
+        for j in range(by_8_fs):
+            if abs((x[j+s*by_8_fs])) > the_mean:
+                factor = 1
+                # print("effected!")
+                # print(x[j+s*by_8_fs])
+        if factor != 1:
+            print("was not effected")
+        # factor = 0
+        # current_max = 0
+        # for j in range(by_8_fs):
+        #     if abs((x[j+s*by_8_fs])) > current_max:
+        #         current_max = abs((x[j+s*by_8_fs])) 
+        
+        
+
+        # factor = math.sin(i)
+        # factor = math.sqrt(abs(factor))
+        # factor = math.exp(-(1/(i**2)))*(math.sin(1/i))
+        # factor = abs(math.cos(i*.05))
+        for frame in range(3):
+            frame_counter += 1
+            # for scaling from top left to bottom right x,y,z
+            # print(factor)
+            transform_matrix = np.array\
+                                    ([[1, 0, 0, 0],
+                                    [0, 1, 0, 0],
+                                    [0, 0, 0.1+factor, 0],
+                                    [0, 0, 0, 1]])
+            mesh2_new  = mesh2.copy()
+            mesh_new  = mesh.copy()
+            mesh2_new.transform(transform_matrix)
+            mesh_new.transform(transform_matrix)
+            plotter = pv.Plotter(off_screen=True)
+            plotter.background_color = "white"
+            # mesh.rotate_x(360/frames)
+            plotter.add_mesh(mesh_new, texture=the_tex)
+            plotter.add_mesh(mesh2_new, texture=the_tex2)
+            plotter.add_background_image(background_image)
+            cam = plotter.camera
+            az_counter += 1
+            roll_counter += 1
+            elevation_counter += 1
+
+            cam.roll = roll_counter 
+            cam.azimuth = az_counter
+            cam.elevation = elevation_counter
+        
+
+            if len(str(frame_counter)) == 1:
+                image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "00" + str(frame_counter) + '.png'
+            elif len(str(frame_counter)) == 2:
+                image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(frame_counter) + '.png'
+            else:
+                image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(frame_counter) + '.png'
+            plotter.show(screenshot=image_name)
+
+
+def pyvista_command(stl_image,two_d_image,background_image):
     plotter = pv.Plotter(off_screen=False)
     mesh = pv.read(stl_image)
     mesh2 = pv.read(stl_image)
@@ -487,7 +759,14 @@ def pyvista_command(stl_image,two_d_image):
     # above prints attributes to know how much to translate
     mesh2.rotate_y(180)
     mesh2.translate((140,0,0))
+    # for scaling from top left to bottom right x,y,z
+    # transform_matrix = np.array([[1.1, 0, 0, 0],
+    #                          [0, 1.1, 0, 0],
+    #                          [0, 0, 1.1, 0],
+    #                          [0, 0, 0, 1]])
+    # mesh2.transform(transform_matrix)
     mesh2.texture_map_to_plane(inplace=True)
+    
     texlion = pv.read_texture(two_d_image)
     texlion2 = pv.read_texture(two_d_image)
     texlion.flip(1)
@@ -496,10 +775,16 @@ def pyvista_command(stl_image,two_d_image):
     # tex = examples.download_masonry_texture()
     # mesh.plot(texture=texacs)
     # plotter.add_mesh(mesh, texture=texlion)
-    plotter.add_mesh(mesh, texture=texlion)
+    ## example of how to manipulate light below
+    # plotter.add_mesh(mesh,specular=1,diffuse=0.8,texture=texlion)
+    # texlion2.flip(1)
+    # plotter.add_mesh(mesh2,specular=1,diffuse=0.8,texture=texlion2)
+
+    plotter.add_mesh(mesh,texture=texlion)
     texlion2.flip(1)
     plotter.add_mesh(mesh2,texture=texlion2)
-    
+    if background_image != None:
+        plotter.add_background_image(background_image)
     cam = plotter.camera
 
     cam.roll = 240 
@@ -507,6 +792,8 @@ def pyvista_command(stl_image,two_d_image):
     cam.elevation = 40
     # 
     plotter.show()
+
+
 
 # def main():
 #     # make_images(demo=True)
