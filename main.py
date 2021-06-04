@@ -30,23 +30,13 @@ def respond():
         # print(type(img_data))
         img_data += '=' * (-len(img_data) % 4)
         imgdata = base64.decodebytes(img_data.encode())
-        # print(imgdata[0:200])
-        # imgdata = imgdata[:-3]
-        # print(imgdata[0:200])
-        # print(type(imgdata))
-        
+
         imgdata = imgdata[15:]
         #todo gotta change this
         filename = "./images/imageToSave.jpeg"  
         with open(filename, 'wb') as f:
             f.write(imgdata)            
-        # with open("./images/imageToSave.jpeg", "wb") as fh:
-        #     fh.write(base64.decodebytes(img_data.encode()))
-        # img_data_bytes = base64.decodebytes(img_data.encode())
-        # im_bytes = base64.b64decode(img_data_bytes)   # im_bytes is a binary image
-        # im_file = BytesIO(im_bytes)  # convert image to file-like object
-        # img = Image.open(im_file) 
-        # img.save("./images/imageToSave.jpeg")
+
         time.sleep(0.2)
         
         p1 = subprocess.Popen(['python', "transform_image.py"])
@@ -55,8 +45,6 @@ def respond():
 
         file_vid = flask.send_file("./imageToSave.mp4")
 
-    # return {"status":"good", "video":file_vid}
-    # print(file_vid)
     return file_vid
 
 if __name__ == '__main__':

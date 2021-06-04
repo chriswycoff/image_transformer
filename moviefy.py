@@ -31,7 +31,7 @@ def moviefy(unique_id,image_name,frames,audio=True):
     # print(clips)
     if audio != None:
         concat_clip = concatenate_videoclips(clips, method="compose")
-        video_with_new_audio = concat_clip.set_audio(AudioFileClip("./images/sounds/clip1.mp3")) 
+        video_with_new_audio = concat_clip.set_audio(AudioFileClip("./images/sounds/clip1.wav")) 
         video_with_new_audio.write_videofile(image_name + ".mp4", fps=fps,audio_codec='aac')
     else:
         concat_clip = concatenate_videoclips(clips, method="compose")

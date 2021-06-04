@@ -14,4 +14,4 @@ def make_stl(img_file, new_file, depth=5, double=False, _ascii=False,unique_id=1
 	img = prepareImg(img_file,filter_radius=filter)
 	to_mesh(img, new_file, depth=depth, double=double, _ascii=_ascii, invert=invert)
 
-# make_stl("./images/images_2d/cool_lion.jpeg","./images/images_3d/cool_lion.stl")
+# make_stl("./images/images_2d/cool_lion.jpeg","./images/images_3d/cool_lion.stl",_ascii=True)

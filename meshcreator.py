@@ -2,8 +2,8 @@ import numpy as np
 
 def get_triangles(npimage, depth=10, invert=False):
 	"""
-	Makes upper left and lower right triangles. Takes in numpy array, returns array of triangles. Automatically
-	excludes invalid triangles (triangles with one vertex off the edge)
+	ND array as a argument, returns array of triangles. Automatically
+	Takes invert and depth (depth of base) as optional parameters
 	"""
 	# npimage = npimage * 10
 	# print(npimage)

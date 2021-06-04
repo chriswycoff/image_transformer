@@ -4,7 +4,7 @@ from scipy import ndimage
 import imageutils as iutils
 
 def prepareImg(filename, height=50, filter_radius=8, invert=False, compress=False):
-	"""An old method, used for testing img2stl.to_mesh on random images"""
+	"""prepare image for mapping to stl file"""
 	img = None
 	if filename[-5:] == '.fits':
 		f = fits.open(filename)

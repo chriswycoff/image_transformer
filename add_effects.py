@@ -633,7 +633,7 @@ def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
     background_image=None, background_color=None,lighting=None,unique_id = 1, \
     frames=10):
     ############ audio #########################
-    fn_mp3 = os.path.join('images','sounds','clip1.mp3')
+    fn_mp3 = os.path.join('images','sounds','clip1.wav')
     x, fs = librosa.load(fn_mp3, sr=None)
     print(len(x))
     print()
@@ -668,9 +668,9 @@ def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
     # mesh.rotate_y(30)
     # tex = examples.download_masonry_texture()
     # mesh.plot(texture=texacs)
-    plotter.add_mesh(mesh, texture=the_tex)
+    actor1 = plotter.add_mesh(mesh, texture=the_tex)
     the_tex2.flip(1)
-    plotter.add_mesh(mesh2, texture=the_tex2)
+    actor2 = plotter.add_mesh(mesh2, texture=the_tex2)
     # plotter.show()
     # unique_id = uuid.uuid4()
     os.mkdir('./images/images_effected/'+ str(unique_id))
@@ -689,21 +689,25 @@ def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
     frame_counter = 0
     print("the_max_minus",the_max_minus)
     for s in range(by_8):
-        if s > 10*8:
+        # coefi
+        seconds = 14
+        seconds_by_8 = seconds * 8
+        if s > seconds_by_8:
             break
         factor = 0
-        for j in range(by_8_fs):
-            if abs((x[j+s*by_8_fs])) > the_mean:
-                factor = 1
-                # print("effected!")
-                # print(x[j+s*by_8_fs])
-        if factor != 1:
-            print("was not effected")
-        # factor = 0
-        # current_max = 0
         # for j in range(by_8_fs):
-        #     if abs((x[j+s*by_8_fs])) > current_max:
-        #         current_max = abs((x[j+s*by_8_fs])) 
+        #     if abs((x[j+s*by_8_fs])) > the_mean:
+        #         factor = 1
+        #         # print("effected!")
+        #         # print(x[j+s*by_8_fs])
+        # if factor != 1:
+        #     print("was not effected")
+        factor = 0
+        current_max = 0
+        for j in range(by_8_fs):
+            if abs((x[j+s*by_8_fs])) > current_max:
+                current_max = abs((x[j+s*by_8_fs])) 
+                factor = current_max
         
         
 
@@ -718,7 +722,7 @@ def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
             transform_matrix = np.array\
                                     ([[1, 0, 0, 0],
                                     [0, 1, 0, 0],
-                                    [0, 0, 0.1+factor, 0],
+                                    [0, 0, 0.1+min(.9,factor*5), 0],
                                     [0, 0, 0, 1]])
             mesh2_new  = mesh2.copy()
             mesh_new  = mesh.copy()
@@ -727,9 +731,9 @@ def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
             plotter = pv.Plotter(off_screen=True)
             plotter.background_color = "white"
             # mesh.rotate_x(360/frames)
-            plotter.add_mesh(mesh_new, texture=the_tex)
-            plotter.add_mesh(mesh2_new, texture=the_tex2)
-            plotter.add_background_image(background_image)
+            actor_1 = plotter.add_mesh(mesh_new, texture=the_tex)
+            actor_2 = plotter.add_mesh(mesh2_new, texture=the_tex2)
+            actor_3 = plotter.add_background_image(background_image)
             cam = plotter.camera
             az_counter += 1
             roll_counter += 1
@@ -746,7 +750,19 @@ def create_movie6(two_d_image,three_d_image,double=False,texture_img=None, \
                 image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + "0" + str(frame_counter) + '.png'
             else:
                 image_name = './images/images_effected/'+ str(unique_id)+"/" + "movie" + str(frame_counter) + '.png'
+            
+            # plotter.remove_actor(actor_1)
+            # plotter.remove_actor(actor_2)
+            # plotter.remove_actor(actor_3)
             plotter.show(screenshot=image_name)
+            for ren in plotter.renderers:
+                for actor in list(ren._actors):
+                    ren.remove_actor(actor)
+            
+            
+                
+            
+            
 
 
 def pyvista_command(stl_image,two_d_image,background_image):
