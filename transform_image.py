@@ -49,4 +49,4 @@ if __name__ == "__main__":
     # except:
     #     print("something went wrong likely test files are missing")
          image_path = "./images/imageToSave.jpeg" 
-         transform_image(image_path,frames=360,cleanup=True,make_mov=True,double=True)
+         transform_image(image_path,frames=60,cleanup=True,make_mov=True,double=True)

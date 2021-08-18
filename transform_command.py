@@ -62,8 +62,6 @@ def transform_image_command(image_path,double=False,frames=10, cleanup=True, mak
     else:
         if double:
             if background_image != None:
-                # add_effects.create_movie4(img_file,new_file,unique_id=unique_id,frames=frames,\
-                #     background_image=background_image)
                 add_effects.create_movie4(img_file,new_file,unique_id=unique_id,frames=frames,\
                     background_image=background_image)
                 # add_effects.create_movie5(img_file,new_file,unique_id=unique_id,frames=frames,\
@@ -104,5 +102,5 @@ if __name__ == "__main__":
     image_path = sys.argv[1] 
     # transform_image_command(image_path,frames=360,cleanup=True,make_mov=True,double=True,\
     # filter=2,invert=False,just_see=False,background_image=background_image,audio=None)
-    transform_image_command(image_path,frames=360,cleanup=True,make_mov=False,double=True,\
-    filter=2,invert=False,just_see=True,background_image=background_image,audio=None)
+    transform_image_command(image_path,frames=360,cleanup=False,make_mov=False,double=True,\
+    filter=8,invert=False,just_see=True,background_image=background_image,audio=None)

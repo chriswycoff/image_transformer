@@ -5,7 +5,7 @@ def get_triangles(npimage, depth=10, invert=False):
 	ND array as a argument, returns array of triangles. Automatically
 	Takes invert and depth (depth of base) as optional parameters
 	"""
-	# npimage = npimage * 10
+	npimage = npimage + depth
 	# print(npimage)
 	# print(type(npimage))
 	if invert:
@@ -125,7 +125,7 @@ def get_cross(triset):
 	triset[:,:,0] = np.cross(v1, v2)
 	return triset
 
-def to_mesh(npimage, filename, depth=1, double=False, _ascii=False,invert=False):
+def to_mesh(npimage, filename, depth=3, double=False, _ascii=False,invert=False):
 	"""
 	Writes an npimage to stl file. Splits each pixel into two triangles.
 		npimage - the image to convert represented as a numpy array.

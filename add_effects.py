@@ -796,9 +796,11 @@ def pyvista_command(stl_image,two_d_image,background_image):
     # texlion2.flip(1)
     # plotter.add_mesh(mesh2,specular=1,diffuse=0.8,texture=texlion2)
 
+    # plotter.add_mesh(mesh,texture=texlion,specular=10,diffuse=0.6) # dark lite
     plotter.add_mesh(mesh,texture=texlion)
     texlion2.flip(1)
-    plotter.add_mesh(mesh2,texture=texlion2)
+    # plotter.add_mesh(mesh2,texture=texlion2,specular=10,diffuse=0.6)# dark lite
+    plotter.add_mesh(mesh2,texture=texlion2) 
     if background_image != None:
         plotter.add_background_image(background_image)
     cam = plotter.camera
